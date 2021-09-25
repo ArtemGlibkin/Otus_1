@@ -67,7 +67,8 @@ bool IPV4Pool::reverseCMP(const IPV4& a, const IPV4& b)
 
 void IPV4Pool::lexicSort()
 {
-    std::sort(mStorage.begin(), mStorage.end(), reverseCMP);
+    //std::sort(mStorage.begin(), mStorage.end(), reverseCMP);
+    mStorage.sort(reverseCMP);
 }
 
 void IPV4Pool::read()
@@ -78,7 +79,8 @@ void IPV4Pool::read()
         mStorage.push_back(split(v.at(0), '.'));
     }
 }
-std::string IPV4Pool::getIPV4Str(const IPV4& ip)
+
+std::string IPV4Pool::getIPV4Str(const IPV4& ip) const
 {
     std::stringstream ss;
     for (IPV4::const_iterator ip_part = ip.cbegin(); ip_part != ip.cend(); ++ip_part)
@@ -92,26 +94,99 @@ std::string IPV4Pool::getIPV4Str(const IPV4& ip)
     return ss.str();
 }
 
-void IPV4Pool::writeIPV4(const IPV4& ip)
+void IPV4Pool::writeIPV4(const IPV4& ip) const
 {
     std::cout << getIPV4Str(ip)<<std::endl;
 }
 
-void IPV4Pool::write()
+std::istream& operator>> (std::istream& in, IPV4Pool& point)
 {
-    for (auto ip : mStorage)
+    for (std::string line; std::getline(in, line) && !line.empty();)
     {
-        writeIPV4(ip);
+        std::vector<std::string> v = point.split(line, '\t');
+        point.mStorage.push_back(point.split(v.at(0), '.'));
     }
+    return in;
 }
 
-void IPV4Pool::filterWrite(const std::string& mask_str)
+std::ostream& operator<< (std::ostream& out, const IPV4Pool& point)
 {
-    std::regex regex(mask_str.c_str());
-    for (auto ip : mStorage)
+    for (auto ip : point.mStorage)
     {
-        auto ip_str = getIPV4Str(ip);
-        if (std::regex_search(ip_str, regex))
-            std::cout << ip_str << std::endl;
+        out << point.getIPV4Str(ip)<<std::endl;
     }
+    return out;
+}
+
+IPV4Pool IPV4Pool::filter(const std::string& mask_str)
+{
+    IPV4Pool ret(*this);
+    std::regex regex(mask_str.c_str());
+    auto pool = ret.mStorage;
+    for (auto it = pool.begin(); it != pool.end(); it++)
+    {
+        auto ip_str = getIPV4Str(*it);
+        if (!std::regex_search(ip_str, regex))
+            pool.erase(it);
+    }
+
+    return ret;
  }
+
+bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int> & values)
+{
+    for (int i = 0; i<4; i++)
+    {
+        auto & value = values.at(i);
+        if (value == -1)
+            continue;
+
+        if(value != std::atoi(addr.at(i).c_str()))
+            return false;
+    }
+    return true;
+}
+
+IPV4Pool IPV4Pool::filter(int first, int second, int third, int fourth)
+{
+    IPV4Pool ret(*this);
+    auto & pool = ret.mStorage;
+    for (auto it = pool.begin(); it != pool.end();)
+    {
+        if (!checkFilter(*it, { first, second, third, fourth }))
+        {
+            it = pool.erase(it);
+        }
+        else
+            ++it;
+    }
+
+    return ret;
+}
+
+bool IPV4Pool::checkFilterAny(const IPV4& addr, int value)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (value == std::atoi(addr.at(i).c_str()))
+            return true;
+    }
+    return false;
+}
+
+IPV4Pool IPV4Pool::filterAny(int value)
+{
+    IPV4Pool ret(*this);
+    auto & pool = ret.mStorage;
+    for (auto it = pool.begin(); it != pool.end();)
+    {
+        if (!checkFilterAny(*it, value))
+        {
+            it = pool.erase(it);
+        }
+        else
+            ++it;
+    }
+
+    return ret;
+}
