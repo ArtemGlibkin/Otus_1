@@ -10,13 +10,18 @@ int main(int argc, char const* argv[])
     {
         IPV4Pool ipPool;
 
-        ipPool.read();
+        std::cin >> ipPool;
         ipPool.lexicSort();
-        ipPool.write();
-        ipPool.filterWrite("^1\\.");
-        ipPool.filterWrite("^46\\.70\\.");
-        ipPool.filterWrite("(^|\\.)46(\\.|$)");
+        std::cout << ipPool;
+        std::cout << ipPool.filter(1);
+        std::cout << ipPool.filter(46, 70);
+        std::cout << ipPool.filterAny(46);
+
+        //ipPool.filter("^1\\.");
+        //ipPool.filter("^46\\.70\\.");
+       // ipPool.filter("(^|\\.)46(\\.|$)");
  
+
         // 222.173.235.246
         // 222.130.177.64
         // 222.82.198.61
