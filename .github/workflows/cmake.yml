@@ -18,8 +18,7 @@ jobs:
           submodules: true
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build . --config Release
-      - run: |
-        powershell Compress-Archive Release\ip_filter.exe ip_filter.zip 
+      - run: powershell Compress-Archive Release\ip_filter.exe ip_filter.zip 
       - name: Create Windows Release
         id: create_windows_release
         uses: actions/create-release@v1
