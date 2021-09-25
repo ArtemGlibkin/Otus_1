@@ -10,7 +10,7 @@ env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
 jobs:
-  windows_build:
+   windows_build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,15 +18,14 @@ jobs:
           submodules: true
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build . --config Release
-      - run: powershell Compress-Archive Release\ip_filter.exe ip_filter.zip 
       - name: Create Windows Release
-        id: create_windows_release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: windows-${{ github.run_number }}
-          release_name: Windows Release ${{ github.run_number }}
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
       - name: Upload Release Asset
@@ -36,6 +35,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./ip_filter.zip 
-          asset_name: ip_filter-0.0.${{ github.run_number }}.zip
-          asset_content_type: application/vnd.microsoft.portable-executable
+          asset_path: ./Release/ip_filter.exe
+          asset_name: ip_filter-0.0.${{ github.run_number }}.exe
