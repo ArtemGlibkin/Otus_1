@@ -37,5 +37,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./ip_filter.zip 
-          asset_name: ip_filter-0.0.${{ github.run_number }}.exe
+          asset_name: ip_filter-0.0.${{ github.run_number }}.zip
           asset_content_type: application/vnd.microsoft.portable-executable
