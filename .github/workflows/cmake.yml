@@ -19,7 +19,7 @@ jobs:
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
       - run: cmake --build . --target package
-      - name: Create Release
+      - name: Create Ubuntu Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -47,8 +47,8 @@ jobs:
           submodules: true
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build . --config Release
-      - name: Create Release
-        id: create_release
+      - name: Create Windows Release
+        id: create_windows_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,8 +57,8 @@ jobs:
           release_name: Release ${{ github.run_number }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Windows Release Asset
+        id: upload-winsows-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
