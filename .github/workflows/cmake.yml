@@ -58,12 +58,12 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload Windows Release Asset
-        id: upload-winsows-release-asset
+        id: upload-windows-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{  needs.Make_GitHub_Release.outputs.upload_url }}
           asset_path: ./Release/ip_filter.exe
           asset_name: ip_filter-0.0.${{ github.run_number }}.exe
           asset_content_type: application/vnd.microsoft.portable-executable
