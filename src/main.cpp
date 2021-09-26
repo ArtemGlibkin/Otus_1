@@ -3,14 +3,16 @@
 
 #include "IPV4Storage.h"
 #include <iostream>
+#include <string>
+#include <sstream>
 
 int main(int argc, char const* argv[])
 {
     try
     {
         IPV4Pool ipPool;
-
-        std::cin >> ipPool;
+        //std::cin >> ipPool;
+        ipPool.readFromFile("C:\\Users\\artem\\Downloads\\ip_filter-12995-9d7996\\test2.tsv");
         ipPool.lexicSort();
         std::cout << ipPool;
         std::cout << ipPool.filter(1);
