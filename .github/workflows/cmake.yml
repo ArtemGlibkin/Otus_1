@@ -47,6 +47,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - run: git clone https://github.com/google/googletest
+      - run: cd googletest
+      - run: cmake --build .
+      - run: cmake --build . --target INSTALL
+      - run: cd ..
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build . --config Release
       - run: cmake --build . --target RUN_TESTS
