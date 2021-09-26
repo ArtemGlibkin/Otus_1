@@ -69,6 +69,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Release/ip_filter.exe
+          asset_path: ./bin/Release/ip_filter.exe
           asset_name: ip_filter-0.0.${{ github.run_number }}.exe
           asset_content_type: application/zip
