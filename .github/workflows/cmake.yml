@@ -51,7 +51,7 @@ jobs:
         uses: MarkusJx/googletest-installer@v1.1
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DGTEST_LIBRARY="D:/gtest/lib/gtest.lib" -DGTEST_INCLUDE_DIR="D:/gtest/include" -DGTEST_MAIN_LIBRARY="D:/gtest/lib/gtest_main.lib"
       - run: cmake --build . --config Release
-      - run: cmake --build . --target RUN_TESTS
+      - run: cmake --build . --target RUN_TESTS --config Release
       - name: Create Windows Release
         id: create_release
         uses: actions/create-release@v1
