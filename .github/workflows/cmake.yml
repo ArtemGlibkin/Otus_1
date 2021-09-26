@@ -49,7 +49,7 @@ jobs:
           submodules: true
       - run: git clone https://github.com/google/googletest
       - run: cd googletest
-      - run: cmake --build .
+      - run: cmake .
       - run: cmake --build . --target INSTALL
       - run: cd ..
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
