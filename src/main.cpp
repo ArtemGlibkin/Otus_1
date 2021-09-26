@@ -1,6 +1,6 @@
 ﻿// otus.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
-
+#include "version.h"
 #include "IPV4Storage.h"
 #include <iostream>
 #include <string>
@@ -10,9 +10,14 @@ int main(int argc, char const* argv[])
 {
     try
     {
+		if((argc > 1) && (std::string(argv[1]) == std::string("--version")))
+		{
+			std::cout<<"Version 0.0."<<PROJECT_VERSION_PATCH<<std::endl;
+			return 0;
+		}
+		
         IPV4Pool ipPool;
-        //std::cin >> ipPool;
-        ipPool.readFromFile("C:\\Users\\artem\\Downloads\\ip_filter-12995-9d7996\\test2.tsv");
+        std::cin >> ipPool;
         ipPool.lexicSort();
         std::cout << ipPool;
         std::cout << ipPool.filter(1);

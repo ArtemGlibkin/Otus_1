@@ -9,6 +9,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 project(ip_filter VERSION ${PROJECT_VESRION})
 
+configure_file(include/version.h.in include/version.h)
+
 add_executable(ip_filter src/main.cpp)
 add_library(ip_filter_lib STATIC src/IPV4Storage.cpp)
 add_executable(ip_filter_test tests/IPV4PoolTest.cpp)
