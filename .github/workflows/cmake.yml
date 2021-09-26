@@ -47,12 +47,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - run: git clone https://github.com/google/googletest
-      - run: cd googletest
-      - run: cmake .
-      - run: cmake --build . --target INSTALL
-      - run: cd ..
-      - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
+      - name: Googletest installer
+        uses: MarkusJx/googletest-installer@v1.1
+      - run: cmake . -DPATCH_VERSION=${{ github.run_number }} -DGTEST_LIBRARY="D:/gtest/lib" -DGTEST_INCLUDE_DIR="D:/gtest/include"
       - run: cmake --build . --config Release
       - run: cmake --build . --target RUN_TESTS
       - name: Create Windows Release
