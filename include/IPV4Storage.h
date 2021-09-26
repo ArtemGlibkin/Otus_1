@@ -16,7 +16,7 @@ private:
 	bool checkFilter(const IPV4& addr, const std::vector<int> & values);
 	bool checkFilterAny(const IPV4& addr, int value);
 public:
-	void read();
+	void readFromFile(const std::string & fileName);
 	std::string getIPV4Str(const IPV4& ip) const;
 	IPV4Pool filter(const std::string& mask);
 	IPV4Pool filterAny(int value);

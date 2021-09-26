@@ -18,6 +18,7 @@ jobs:
           submodules: true
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
+      - run: cmake --build . --target RUN_TESTS
       - run: cmake --build . --target package
       - name: Create Ubuntu Release
         id: create_release
@@ -47,6 +48,7 @@ jobs:
           submodules: true
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build . --config Release
+      - run: cmake --build . --target RUN_TESTS
       - name: Create Windows Release
         id: create_release
         uses: actions/create-release@v1

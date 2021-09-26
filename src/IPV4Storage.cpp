@@ -3,6 +3,7 @@
 #include <iostream>
 #include <regex>
 #include <sstream>
+#include <fstream>
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -71,9 +72,13 @@ void IPV4Pool::lexicSort()
     mStorage.sort(reverseCMP);
 }
 
-void IPV4Pool::read()
+void IPV4Pool::readFromFile(const std::string& fileName)
 {
-    for (std::string line; std::getline(std::cin, line) && !line.empty();)
+    std::ifstream file(fileName);
+    if (!file.is_open())
+        throw std::runtime_error("File " + fileName + " was not found");
+
+    for (std::string line; std::getline(file, line) && !line.empty();)
     {
         std::vector<std::string> v = split(line, '\t');
         mStorage.push_back(split(v.at(0), '.'));
