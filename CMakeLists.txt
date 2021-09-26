@@ -19,6 +19,7 @@ set_target_properties(ip_filter PROPERTIES
 )
 
 find_package(GTest REQUIRED)
+find_package(Threads REQUIRED)
 
 target_include_directories(ip_filter
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -32,6 +33,7 @@ target_include_directories(ip_filter_lib
 
 target_include_directories(ip_filter_test PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(ip_filter_test ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} ip_filter_lib)
+target_link_libraries(ip_filter_test PRIVATE Threads::Threads)
 
 if(MSVC)
     target_compile_options(ip_filter_test PRIVATE /MT)
