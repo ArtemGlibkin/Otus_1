@@ -4,7 +4,12 @@
 #include <sstream>
 #include <filesystem>
 
-const std::string testCasesPath = ".\\tests\\test_cases\\";
+#ifdef _WIN32
+	const std::string testCasesPath = ".\\tests\\test_cases\\";
+#else
+	const std::string testCasesPath = "./tests/test_cases/";
+#endif
+
 std::string readFromFile(const std::string& fileName)
 {
 	std::ifstream file(fileName);

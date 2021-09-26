@@ -19,7 +19,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install libgtest-dev
       - run: cmake . -DPATCH_VERSION=${{ github.run_number }}
       - run: cmake --build .
-      - run: cmake --build . --target RUN_TESTS
+      - run: cmake --build . --target test
       - run: cmake --build . --target package
       - name: Create Ubuntu Release
         id: create_release
