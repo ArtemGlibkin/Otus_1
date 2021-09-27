@@ -44,7 +44,7 @@ std::vector<uint8_t> parseIPAddr(const std::string& str)
 {
     std::stringstream ss(str);
     std::vector<uint8_t> ret(4);
-    int i = 0;
+    uint8_t i = 0;
     for (std::string line; std::getline(ss, line, '.') && (i < 4) && !line.empty();i++)
     {
         ret.at(i) = std::atoi(line.c_str());
@@ -54,7 +54,7 @@ std::vector<uint8_t> parseIPAddr(const std::string& str)
 
 bool reverseCMP(const IPV4& a, const IPV4& b)
 {
-    for (int8_t i = 0; i < 4; i++)
+    for (uint8_t i = 0; i < 4; i++)
     {
         int first = a.at(i);
         int second = b.at(i);
@@ -117,7 +117,7 @@ IPV4Pool IPV4Pool::filter(const std::string& mask_str)
     return ret;
  }
 
-bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int8_t> & values)
+bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int> & values)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -131,7 +131,7 @@ bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int8_t> & values)
     return true;
 }
 
-IPV4Pool IPV4Pool::filter(int8_t first, int8_t second, int8_t third, int8_t fourth)
+IPV4Pool IPV4Pool::filter(int first, int second, int third, int fourth)
 {
     IPV4Pool ret(*this);
     auto & pool = ret.mStorage;
@@ -148,7 +148,7 @@ IPV4Pool IPV4Pool::filter(int8_t first, int8_t second, int8_t third, int8_t four
     return ret;
 }
 
-bool IPV4Pool::checkFilterAny(const IPV4& addr, int8_t value)
+bool IPV4Pool::checkFilterAny(const IPV4& addr, uint8_t value)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -158,7 +158,7 @@ bool IPV4Pool::checkFilterAny(const IPV4& addr, int8_t value)
     return false;
 }
 
-IPV4Pool IPV4Pool::filterAny(int8_t value)
+IPV4Pool IPV4Pool::filterAny(uint8_t value)
 {
     IPV4Pool ret(*this);
     auto & pool = ret.mStorage;
