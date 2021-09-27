@@ -32,9 +32,9 @@ IPV4 IPV4Pool::split(const std::string& str, char d)
 }
 */
 
-IPV4 IPV4Pool::split(const std::string& str, char d)
+std::vector<std::string> IPV4Pool::split(const std::string& str, char d)
 {
-    std::vector<std::string> r;
+    std::list<std::string> r;
 
     std::string::size_type start = 0;
     std::string::size_type stop = str.find_first_of(d);
@@ -48,7 +48,7 @@ IPV4 IPV4Pool::split(const std::string& str, char d)
 
     r.push_back(str.substr(start));
 
-    return r;
+    return std::vector<std::string>(r.begin(), r.end());
 }
 
 bool IPV4Pool::reverseCMP(const IPV4& a, const IPV4& b)
@@ -138,12 +138,12 @@ IPV4Pool IPV4Pool::filter(const std::string& mask_str)
     return ret;
  }
 
-bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int> & values)
+bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int8_t> & values)
 {
-    for (int i = 0; i<4; i++)
+    for (int i = 0; i < 4; i++)
     {
         auto & value = values.at(i);
-        if (value == -1)
+        if (value == mEmptyFilter)
             continue;
 
         if(value != std::atoi(addr.at(i).c_str()))
@@ -152,7 +152,7 @@ bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int> & values)
     return true;
 }
 
-IPV4Pool IPV4Pool::filter(int first, int second, int third, int fourth)
+IPV4Pool IPV4Pool::filter(int8_t first, int8_t second, int8_t third, int8_t fourth)
 {
     IPV4Pool ret(*this);
     auto & pool = ret.mStorage;
@@ -169,7 +169,7 @@ IPV4Pool IPV4Pool::filter(int first, int second, int third, int fourth)
     return ret;
 }
 
-bool IPV4Pool::checkFilterAny(const IPV4& addr, int value)
+bool IPV4Pool::checkFilterAny(const IPV4& addr, int8_t value)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -179,7 +179,7 @@ bool IPV4Pool::checkFilterAny(const IPV4& addr, int value)
     return false;
 }
 
-IPV4Pool IPV4Pool::filterAny(int value)
+IPV4Pool IPV4Pool::filterAny(int8_t value)
 {
     IPV4Pool ret(*this);
     auto & pool = ret.mStorage;
