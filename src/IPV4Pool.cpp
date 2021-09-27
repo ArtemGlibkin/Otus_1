@@ -11,52 +11,53 @@
 // ("11.", '.') -> ["11", ""]
 // (".11", '.') -> ["", "11"]
 // ("11.22", '.') -> ["11", "22"]
-/*
-IPV4 IPV4Pool::split(const std::string& str, char d)
+
+std::string getIPV4Str(const IPV4& ip)
 {
-    std::vector<std::string> r;
-
-    std::string::size_type start = 0;
-    std::string::size_type stop = str.find_first_of(d);
-    while (stop != std::string::npos)
+    std::stringstream ss;
+    for (IPV4::const_iterator ip_part = ip.cbegin(); ip_part != ip.cend(); ++ip_part)
     {
-        r.push_back(str.substr(start, stop - start));
-
-        start = stop + 1;
-        stop = str.find_first_of(d, start);
+        if (ip_part != ip.cbegin())
+        {
+            ss << ".";
+        }
+        ss << std::to_string(*ip_part);
     }
-
-    r.push_back(str.substr(start));
-
-    return r;
-}
-*/
-
-std::vector<std::string> IPV4Pool::split(const std::string& str, char d)
-{
-    std::list<std::string> r;
-
-    std::string::size_type start = 0;
-    std::string::size_type stop = str.find_first_of(d);
-    while (stop != std::string::npos)
-    {
-        r.push_back(str.substr(start, stop - start));
-
-        start = stop + 1;
-        stop = str.find_first_of(d, start);
-    }
-
-    r.push_back(str.substr(start));
-
-    return std::vector<std::string>(r.begin(), r.end());
+    return ss.str();
 }
 
-bool IPV4Pool::reverseCMP(const IPV4& a, const IPV4& b)
+void writeIPV4(const IPV4& ip)
+{
+    std::cout << getIPV4Str(ip) << std::endl;
+}
+
+std::string getAddr(const std::string str)
+{
+    std::stringstream ss(str);
+    std::string ip;
+    if (!std::getline(ss, ip, '\t'))
+        throw std::runtime_error("Parse ip from stream return error code");
+    return ip;
+}
+
+std::vector<uint8_t> parseIPAddr(const std::string& str)
+{
+    std::stringstream ss(str);
+    std::vector<uint8_t> ret(4);
+    int i = 0;
+    for (std::string line; std::getline(ss, line, '.') && (i < 4) && !line.empty();i++)
+    {
+        ret.at(i) = std::atoi(line.c_str());
+    }
+    return ret;
+}
+
+bool reverseCMP(const IPV4& a, const IPV4& b)
 {
     for (int8_t i = 0; i < 4; i++)
     {
-        int first = std::atoi(a.at(i).c_str());
-        int second = std::atoi(b.at(i).c_str());
+        int first = a.at(i);
+        int second = b.at(i);
         if (first > second)
             return true;
         else if (first < second)
@@ -68,7 +69,6 @@ bool IPV4Pool::reverseCMP(const IPV4& a, const IPV4& b)
 
 void IPV4Pool::lexicSort()
 {
-    //std::sort(mStorage.begin(), mStorage.end(), reverseCMP);
     mStorage.sort(reverseCMP);
 }
 
@@ -80,36 +80,15 @@ void IPV4Pool::readFromFile(const std::string& fileName)
 
     for (std::string line; std::getline(file, line) && !line.empty();)
     {
-        std::vector<std::string> v = split(line, '\t');
-        mStorage.push_back(split(v.at(0), '.'));
+        mStorage.push_back(parseIPAddr(getAddr(line)));
     }
-}
-
-std::string IPV4Pool::getIPV4Str(const IPV4& ip) const
-{
-    std::stringstream ss;
-    for (IPV4::const_iterator ip_part = ip.cbegin(); ip_part != ip.cend(); ++ip_part)
-    {
-        if (ip_part != ip.cbegin())
-        {
-            ss << ".";
-        }
-        ss << *ip_part;
-    }
-    return ss.str();
-}
-
-void IPV4Pool::writeIPV4(const IPV4& ip) const
-{
-    std::cout << getIPV4Str(ip)<<std::endl;
 }
 
 std::istream& operator>> (std::istream& in, IPV4Pool& point)
 {
     for (std::string line; std::getline(in, line) && !line.empty();)
     {
-        std::vector<std::string> v = point.split(line, '\t');
-        point.mStorage.push_back(point.split(v.at(0), '.'));
+        point.mStorage.push_back(parseIPAddr(getAddr(line)));
     }
     return in;
 }
@@ -118,7 +97,7 @@ std::ostream& operator<< (std::ostream& out, const IPV4Pool& point)
 {
     for (auto ip : point.mStorage)
     {
-        out << point.getIPV4Str(ip)<<std::endl;
+        out << getIPV4Str(ip)<<std::endl;
     }
     return out;
 }
@@ -146,7 +125,7 @@ bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int8_t> & values)
         if (value == mEmptyFilter)
             continue;
 
-        if(value != std::atoi(addr.at(i).c_str()))
+        if(value != addr.at(i))
             return false;
     }
     return true;
@@ -173,7 +152,7 @@ bool IPV4Pool::checkFilterAny(const IPV4& addr, int8_t value)
 {
     for (int i = 0; i < 4; i++)
     {
-        if (value == std::atoi(addr.at(i).c_str()))
+        if (value == addr.at(i))
             return true;
     }
     return false;
