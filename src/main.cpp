@@ -1,7 +1,7 @@
 ﻿// otus.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
-#include "IPV4Storage.h"
+#include "IPV4Pool.h"
 #include <iostream>
 
 int main(int argc, char const* argv[])
