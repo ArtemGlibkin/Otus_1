@@ -1,13 +1,19 @@
 ﻿// otus.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
-
 #include "IPV4Pool.h"
+#include "version.h"
 #include <iostream>
 
 int main(int argc, char const* argv[])
 {
     try
     {
+		if((argc > 1) && (std::string(argv[1]) == std::string("--version")))
+		{
+			std::cout<<"Version 0.0."<<PROJECT_VERSION_PATCH<<std::endl;
+			return 0;
+		}
+		
         IPV4Pool ipPool;
         std::cin >> ipPool;
         ipPool.lexicSort();
