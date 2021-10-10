@@ -15,7 +15,7 @@
 std::string getIPV4Str(const IPV4& ip)
 {
     std::stringstream ss;
-    for (IPV4::const_iterator ip_part = ip.cbegin(); ip_part != ip.cend(); ++ip_part)
+    for (auto ip_part = ip.cbegin(); ip_part != ip.cend(); ++ip_part)
     {
         if (ip_part != ip.cbegin())
         {
@@ -31,7 +31,7 @@ void writeIPV4(const IPV4& ip)
     std::cout << getIPV4Str(ip) << std::endl;
 }
 
-std::string getAddr(const std::string str)
+std::string getAddr(const std::string & str)
 {
     std::stringstream ss(str);
     std::string ip;
@@ -43,33 +43,18 @@ std::string getAddr(const std::string str)
 std::vector<uint8_t> parseIPAddr(const std::string& str)
 {
     std::stringstream ss(str);
-    std::vector<uint8_t> ret(4);
+    std::vector<uint8_t> ret(IPV4OctetNumber);
     uint8_t i = 0;
-    for (std::string line; std::getline(ss, line, '.') && (i < 4) && !line.empty();i++)
+    for (std::string line; std::getline(ss, line, '.') && (i < IPV4OctetNumber) && !line.empty();i++)
     {
         ret.at(i) = std::atoi(line.c_str());
     }
     return ret;
 }
 
-bool reverseCMP(const IPV4& a, const IPV4& b)
-{
-    for (uint8_t i = 0; i < 4; i++)
-    {
-        int first = a.at(i);
-        int second = b.at(i);
-        if (first > second)
-            return true;
-        else if (first < second)
-            return false;
-    }
-
-    return false;
-}
-
 void IPV4Pool::lexicSort()
 {
-    mStorage.sort(reverseCMP);
+    mStorage.sort(std::greater<IPV4>());
 }
 
 void IPV4Pool::readFromFile(const std::string& fileName)
@@ -119,7 +104,7 @@ IPV4Pool IPV4Pool::filter(const std::string& mask_str)
 
 bool IPV4Pool::checkFilter(const IPV4& addr, const std::vector<int> & values)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < IPV4OctetNumber; i++)
     {
         auto & value = values.at(i);
         if (value == mEmptyFilter)
@@ -150,7 +135,7 @@ IPV4Pool IPV4Pool::filter(int first, int second, int third, int fourth)
 
 bool IPV4Pool::checkFilterAny(const IPV4& addr, uint8_t value)
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < IPV4OctetNumber; i++)
     {
         if (value == addr.at(i))
             return true;

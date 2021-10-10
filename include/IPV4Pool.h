@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 
-typedef std::vector<uint8_t> IPV4;
+using IPV4 = std::vector<uint8_t>;
+const int IPV4OctetNumber = 4;
 
 class IPV4Pool
 {
