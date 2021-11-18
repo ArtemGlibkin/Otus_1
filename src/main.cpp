@@ -17,6 +17,7 @@ int main(int argc, char const* argv[])
         IPV4Pool ipPool;
         std::cin >> ipPool;
         ipPool.lexicSort();
+
         std::cout << ipPool;
         std::cout << ipPool.filter(1);
         std::cout << ipPool.filter(46, 70);
@@ -92,7 +93,7 @@ int main(int argc, char const* argv[])
     }
     catch (const std::exception& e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr<<e.what()<<std::endl;
     }
 
     return 0;

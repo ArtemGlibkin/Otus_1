@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-typedef std::vector<uint8_t> IPV4;
+using IPV4 = std::vector<uint8_t>;
 
 class IPV4Pool
 {
